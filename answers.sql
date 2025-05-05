@@ -1,35 +1,53 @@
 --wk7 assignment solutions
 --question 1 answer
 
--- Create a new table to store the normalized data
-CREATE TABLE ProductDetail_1NF (
+-- Create ProductDetail table (normalized)
+CREATE TABLE ProductDetail (
     OrderID INT,
-    CustomerName VARCHAR(255),
-    Product VARCHAR(255)
+    CustomerName VARCHAR(100),
+    Products VARCHAR(100)
 );
 
--- Insert the data into the new table, breaking the Products column into separate rows
-INSERT INTO ProductDetail_1NF (OrderID, CustomerName, Product)
-SELECT 101, 'John Doe', 'Laptop' UNION ALL
-SELECT 101, 'John Doe', 'Mouse' UNION ALL
-SELECT 102, 'Jane Smith', 'Tablet' UNION ALL
-SELECT 102, 'Jane Smith', 'Keyboard' UNION ALL
-SELECT 102, 'Jane Smith', 'Mouse' UNION ALL
-SELECT 103, 'Emily Clark', 'Phone';
+-- Insert normalized rows
+INSERT INTO ProductDetail (OrderID, CustomerName, Products)
+VALUES
+(101, 'John Doe', 'Laptop'),
+(101, 'John Doe', 'Mouse'),
+(102, 'Jane Smith', 'Tablet'),
+(102, 'Jane Smith', 'Keyboard'),
+(102, 'Jane Smith', 'Mouse'),
+(103, 'Emily Clark', 'Phone');
 
 
---question 2
--- Table to store Order details with the CustomerName information
+--question 2 -2NF
+-- Create Orders table
 CREATE TABLE Orders (
     OrderID INT PRIMARY KEY,
-    CustomerName VARCHAR(255)
+    CustomerName VARCHAR(100)
 );
 
--- Table to store the details of the products ordered
-CREATE TABLE OrderProducts (
+-- Insert data into Orders
+INSERT INTO Orders (OrderID, CustomerName)
+VALUES
+(101, 'John Doe'),
+(102, 'Jane Smith'),
+(103, 'Emily Clark');
+
+-- Create Product table (with quantities)
+CREATE TABLE Product (
     OrderID INT,
-    Product VARCHAR(255),
+    Product VARCHAR(100),
     Quantity INT,
     PRIMARY KEY (OrderID, Product),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
 );
+
+-- Insert product data with quantities
+INSERT INTO Product (OrderID, Product, Quantity)
+VALUES
+(101, 'Laptop', 2),
+(101, 'Mouse', 1),
+(102, 'Tablet', 3),
+(102, 'Keyboard', 1),
+(102, 'Mouse', 2),
+(103, 'Phone', 1);
